@@ -1,0 +1,17 @@
+{
+  "name": "test_log4js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "preinstall": "npm install ./logger"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "uuid": "^3.3.2",
+    "logger" : "file:logger"
+  }
+}
