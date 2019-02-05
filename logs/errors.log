@@ -1,0 +1,2 @@
+[2019-02-05T19:18:07.656] [ERROR] api - {"id":"ab1c9060-294c-11e9-89ba-2bd9151b0d0e","info":{"path":"/test","method":"POST","data":{"msg":"error occured"}}}
+[2019-02-05T19:18:07.661] [ERROR] api - "POST /test  Status/400" Id: ab1c9060-294c-11e9-89ba-2bd9151b0d0e

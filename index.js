@@ -40,7 +40,6 @@ app.post('/test', firstMiddleware, secondMiddleware, (req, res) => {
 
 
 
-
 // Object.defineProperty(global, '__stack', {
     //     get: function () {
     //         var orig = Error.prepareStackTrace;
