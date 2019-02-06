@@ -1,19 +1,19 @@
 const log4js = require('log4js');
 const fs = require('fs');
+
 let filePath;
 let isLoggerEnabled;
 let logLevel
 let loggerInit = false;
-
 const defaultConfig = {
     dir: '../logs',
     isLoggerEnabled: true,
     logLevel: 'error'
 }
 
-const init = (config) => {
-    logLevel = config.level || defaultConfig.logLevel;
-    isLoggerEnabled = config.enable !== undefined ? config.enable : defaultConfig.isLoggerEnabled;
+const init = (config = defaultConfig) => {
+    logLevel = config.logLevel || defaultConfig.logLevel;
+    isLoggerEnabled = config.isLoggerEnabled !== undefined ? config.isLoggerEnabled : defaultConfig.isLoggerEnabled;
     filePath = config.dir || defaultConfig.dir;
 
     if (filePath && !fs.existsSync(filePath)) {
@@ -35,15 +35,18 @@ const init = (config) => {
             default: { appenders: ['console', 'logs'], level: logLevel }
         }
     });
-
     loggerInit = true;
 }
 
 var processRequestObject = (request) => {
-    return {
-        id: request.id,
-        path: request.route.path,
-        method: request.method
+    if (request) {
+        return {
+            id: request.id,
+            path: request.route.path,
+            method: request.method
+        }
+    } else {
+        return {}
     }
 }
 

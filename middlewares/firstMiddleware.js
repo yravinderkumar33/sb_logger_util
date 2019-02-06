@@ -11,7 +11,6 @@ const firstMiddleware = (req, res, next) => {
         headers: req.headers
     }
     log.info({ msg: "test info message", data }, req);
-
     next();
 }
 
