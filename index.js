@@ -3,11 +3,12 @@ const app = express();
 const log4js = require('log4js');
 const bodyParser = require('body-parser');
 const { firstMiddleware, secondMiddleware } = require('./middlewares/firstMiddleware');
-const { logger } = require('logger');
+const { init, logger } = require('logger');
 const uuidV1 = require('uuid/v1');
 
 app.listen(6000, () => {
     console.log("server is running at port 6000");
+    init('trace', true, 'microserviceLogs');
 })
 
 app.use(bodyParser.json());
@@ -34,9 +35,6 @@ app.post('/', firstMiddleware, function (req, res) {
     res.send('POST request to the homepage')
 })
 
-app.post('/test', firstMiddleware, secondMiddleware, (req, res) => {
-    res.send("second route with errors")
-})
 
 
 
@@ -53,13 +51,13 @@ app.post('/test', firstMiddleware, secondMiddleware, (req, res) => {
     //         return stack;
     //     }
     // });
-    
+
     // Object.defineProperty(global, '__line', {
     //     get: function () {
     //         return __stack[1].getLineNumber();
     //     }
     // });
-    
+
     // Object.defineProperty(global, '__function', {
     //     get: function () {
     //         return __stack[1].getFunctionName();
