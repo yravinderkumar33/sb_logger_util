@@ -1,17 +1,23 @@
 const log4js = require('log4js');
 const fs = require('fs');
-let dir = '../logs';
-let isLoggerEnabled = true;
-let logLevel = 'error';
-let logInit = false;
+let filePath;
+let isLoggerEnabled;
+let logLevel
+let loggerInit = false;
 
-const init = (level, status, directory) => {
-    logLevel = level ? level : logLevel;
-    isLoggerEnabled = status ? status : isLoggerEnabled;
-    dir = directory ? directory : dir;
+const defaultConfig = {
+    dir: '../logs',
+    isLoggerEnabled: true,
+    logLevel: 'error'
+}
 
-    if (dir && !fs.existsSync(dir)) {
-        fs.mkdirSync(dir)
+const init = (config) => {
+    logLevel = config.level || defaultConfig.logLevel;
+    isLoggerEnabled = config.enable !== undefined ? config.enable : defaultConfig.isLoggerEnabled;
+    filePath = config.dir || defaultConfig.dir;
+
+    if (filePath && !fs.existsSync(filePath)) {
+        fs.mkdirSync(filePath)
     }
 
     log4js.configure({
@@ -19,31 +25,21 @@ const init = (level, status, directory) => {
             console: {
                 'type': 'console'
             },
-            everything: {
+            logs: {
                 'type': 'file',
                 'maxLogSize': 26214400,
-                'filename': `${dir}/microserviceLogs.log`
-            },
-            errors: {
-                'type': 'file',
-                'maxLogSize': 26214400,
-                'filename': `${dir}/errors.log`
-            },
-            all_errors: {
-                'type': 'logLevelFilter',
-                'appender': 'errors',
-                'level': 'error'
+                'filename': `${filePath}/microserviceLogs.log`
             }
         },
         categories: {
-            default: { appenders: ['console', 'all_errors', 'everything'], level: logLevel }
+            default: { appenders: ['console', 'logs'], level: logLevel }
         }
     });
 
-    logInit = true;
+    loggerInit = true;
 }
 
-var processRequest = (request) => {
+var processRequestObject = (request) => {
     return {
         id: request.id,
         path: request.route.path,
@@ -54,44 +50,44 @@ var processRequest = (request) => {
 const logger = log4js.getLogger('api');
 
 var info = function (data, request) {
-    if (logInit && isLoggerEnabled) {
-        logger.info(JSON.stringify({ ...processRequest(request), ...data }))
+    if (loggerInit && isLoggerEnabled) {
+        logger.info(JSON.stringify({ ...processRequestObject(request), ...data }))
     }
 }
 
 var debug = function (data, request) {
-    if (logInit && isLoggerEnabled) {
-        logger.debug(JSON.stringify({ ...processRequest(request), ...data }))
+    if (loggerInit && isLoggerEnabled) {
+        logger.debug(JSON.stringify({ ...processRequestObject(request), ...data }))
     }
 }
 
 var fatal = function (data, request) {
-    if (logInit && isLoggerEnabled) {
-        logger.fatal(JSON.stringify({ ...processRequest(request), ...data }))
+    if (loggerInit && isLoggerEnabled) {
+        logger.fatal(JSON.stringify({ ...processRequestObject(request), ...data }))
     }
 }
 
 var mark = function (data, request) {
-    if (logInit && isLoggerEnabled) {
-        logger.mark(JSON.stringify({ ...processRequest(request), ...data }))
+    if (loggerInit && isLoggerEnabled) {
+        logger.mark(JSON.stringify({ ...processRequestObject(request), ...data }))
     }
 }
 
 var error = function (data, request) {
-    if (logInit && isLoggerEnabled) {
-        logger.error(JSON.stringify({ ...processRequest(request), ...data }))
+    if (loggerInit && isLoggerEnabled) {
+        logger.error(JSON.stringify({ ...processRequestObject(request), ...data }))
     }
 }
 
 var warn = function (data, request) {
-    if (logInit && isLoggerEnabled) {
-        logger.warn(JSON.stringify({ ...processRequest(request), ...data }))
+    if (loggerInit && isLoggerEnabled) {
+        logger.warn(JSON.stringify({ ...processRequestObject(request), ...data }))
     }
 }
 
 var trace = function (data, request) {
-    if (logInit && isLoggerEnabled) {
-        logger.trace(JSON.stringify({ ...processRequest(request), ...data }))
+    if (loggerInit && isLoggerEnabled) {
+        logger.trace(JSON.stringify({ ...processRequestObject(request), ...data }))
     }
 }
 

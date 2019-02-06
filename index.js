@@ -5,10 +5,9 @@ const bodyParser = require('body-parser');
 const { firstMiddleware, secondMiddleware } = require('./middlewares/firstMiddleware');
 const { init, logger } = require('logger');
 const uuidV1 = require('uuid/v1');
-
+init({ level: 'trace', enable: true, dir: 'logs' });
 app.listen(6000, () => {
     console.log("server is running at port 6000");
-    init('trace', true, 'microserviceLogs');
 })
 
 app.use(bodyParser.json());
